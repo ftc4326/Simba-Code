@@ -41,232 +41,109 @@ import com.qualcomm.robotcore.util.Range;
 
 
 public class FTCLionsTeleOp extends OpMode {
-    /*
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-    */
-    DcMotor leftM;
-    DcMotor rightM;
-    DcMotor arm;
-    DcMotor armY;
-    DcMotor xArm;
-    //DcMotor Helix;
-   // DcMotor LinearSlide1;
-  //  DcMotor LinearSlide2;
-    //DcMotor MidLeft;
-    //DcMotor MidRight;
-    //Servo arm1;
-    //Servo arm2;
+    final boolean DEBUG = true;
+
+    DcMotor leftDrive;
+    DcMotor rightDrive;
+    DcMotor armX1;
+    DcMotor armX2;
+    DcMotor armTheta;
+
     Servo wing1;
     Servo wing2;
     Servo flap;
     Servo allClear;
-    //Servo wrist;
-    //DcMotor sweep;
 
-    //SERVO TRY
-    final static double ARM_MIN_RANGE = 0.05;
-    final static double ARM_MAX_RANGE = 0.90;
-    //final static double CLAW_MIN_RANGE = 0.20;
-    //final static double CLAW_MAX_RANGE = 0.7;
-    double armPosition = 0.1;
-    double armDelta = 0.1;
-    //double clawPosition;
-    //double clawDelta = 0.1;
+    boolean started = false;
 
-    boolean started=false;
     public FTCLionsTeleOp() {
+
     }
 
     @Override
     public void start() {
-        started=true;
+        started = true;
 
-        leftM=hardwareMap.dcMotor.get("backLeft");
-        rightM=hardwareMap.dcMotor.get("backRight");
+        leftDrive = hardwareMap.dcMotor.get("backLeft");
+        rightDrive = hardwareMap.dcMotor.get("backRight");
 
-        arm=hardwareMap.dcMotor.get("arm");
-        armY=hardwareMap.dcMotor.get("armY");
-        xArm=hardwareMap.dcMotor.get("xArm");
+        armTheta = hardwareMap.dcMotor.get("armY");
+        armX1 = hardwareMap.dcMotor.get("arm");
+        armX2 = hardwareMap.dcMotor.get("xArm");
 
-        wing1=hardwareMap.servo.get("wing1");
-        wing2=hardwareMap.servo.get("wing2");
+        wing1 = hardwareMap.servo.get("wing1");
+        wing2 = hardwareMap.servo.get("wing2");
         wing1.scaleRange(0, 1);
         wing2.scaleRange(0, 1);
-        allClear=hardwareMap.servo.get("allClear");
+        allClear = hardwareMap.servo.get("allClear");
         allClear.scaleRange(0, 1);
 
-        flap=hardwareMap.servo.get("flap");
+        flap = hardwareMap.servo.get("flap");
 
         flap.scaleRange(0, 1);
 
-        leftM.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        rightM.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
-        arm.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        armY.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        xArm.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        //super.start();
+        armTheta.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        armX1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        armX2.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
-    double startPos=0;
+
     @Override
     public void init() {
 
     }
 
 
-    int count=0;
-    int startn=0;
-    boolean ran=false;
-    boolean ran2=false;
-
     @Override
     public void loop() {
-    if(started) {
-    count++;
+        if (DEBUG) {
+            // TELEMETRY FOR JOYSTICK DEBUGGING
+            telemetry.addData("Text", "***Robot Movement Data***");
+            telemetry.addData("right gamepad stick y ", gamepad1.right_stick_y);
+            telemetry.addData("-right gamepad stick y ", -gamepad1.right_stick_y);
+            telemetry.addData("-left gamepad stick y ", -gamepad1.left_stick_y);
+            telemetry.addData("left gamepad stick y ", gamepad1.left_stick_y);
+        }
 
-    //GAMEPAD 1 CONTROLS-------------------------------------------------------------------------------------------------------------------------
+        if (started) {
+            ////////////////////////////////
+            //     GAMEPAD 1 CONTROLS     //
+            ////////////////////////////////
 
-    leftM.setPower(gamepad2.right_stick_y);
-    rightM.setPower(-gamepad2.left_stick_y);
-    //telementry for autonimous purposes
-    //telemetry.addData("Text", "***Robot Movement Data***");
-    //telemetry.addData("right gamepad stick y ", gamepad1.right_stick_y);
-    //telemetry.addData("-right gamepad stick y ", -gamepad1.right_stick_y);
-    //telemetry.addData("-left gamepad stick y ", -gamepad1.left_stick_y);
-    //telemetry.addData("left gamepad stick y ", gamepad1.left_stick_y);
-
-    //wings
-        //disable wings
-            // if (Math.abs(gamepad1.right_stick_x) > 0) {
-                 //wing1.setPosition(Range.clip(wing1.getPosition() + (gamepad2.right_stick_x), 0, 1));
-            // //}
-            // if (Math.abs(gamepad1.left_stick_x) > 0) {
-                 //wing2.setPosition(Range.clip(wing2.getPosition() + (gamepad2.left_stick_x), 0, 1));
-            // }
+            // TANK DRIVE
+            leftDrive.setPower(gamepad1.right_stick_y);
+            rightDrive.setPower(-gamepad1.left_stick_y);
 
 
-
-    //GAMEPAD 2 CONTROLS-------------------------------------------------------------------------------------------------------------------------
-
-//ARM-ARM EXTENSION- ARM UP/DOWN
-    arm.setPower(-gamepad1.left_stick_y);
-    xArm.setPower(gamepad1.right_stick_y);
-    armY.setPower(gamepad2.right_stick_x);
-
-    //all clear
-    if (gamepad1.right_trigger < 1) {
-        allClear.setPosition(Range.clip(1-gamepad1.right_trigger, 0, 1));
-    } else {
-        allClear.setPosition(1);
-    }
-
-    //wing2.setPosition(Math.abs(gamepad2.left_stick_x));
-
-    //flap
-  /*  if (gamepad1.left_trigger < 1) {
-        flap.setPosition(Range.clip(gamepad1.left_trigger, 0, 1));
-    } else {
-        flap.setPosition(1);
-    }*/
+            // WINGS
+            wing1.setPosition(Range.clip(wing1.getPosition() + (gamepad1.right_stick_x), 0, 1));
+            wing2.setPosition(Range.clip(wing2.getPosition() + (gamepad1.left_stick_x), 0, 1));
 
 
+            ////////////////////////////////
+            //     GAMEPAD 2 CONTROLS     //
+            ////////////////////////////////
 
+            // ARM
+            armX1.setPower(-gamepad2.left_stick_y);
+            armX2.setPower(gamepad2.right_stick_y);
+            armTheta.setPower(gamepad2.right_stick_x);
 
-    //COMBO CONTROLS----------------------------------------------------------------------------------------------------------------------------
+            // ALL CLEAR
+            if (gamepad1.right_trigger < 1) {
+                allClear.setPosition(Range.clip(1 - gamepad1.right_trigger, 0, 1));
+            } else {
+                allClear.setPosition(1);
+            }
 
-    //E stop!!!!!!!!!
-    if (gamepad1.left_bumper&&gamepad1.right_bumper&&gamepad2.left_bumper&&gamepad2.right_bumper) {
-        leftM.setPower(0);
-        rightM.setPower(0);
-    }
-
-
-
-/*
-    //wrist??
-    if (gamepad2.a) {
-        wrist.setPosition(Range.clip(wrist.getPosition() + 0.01, 0, 1));
-    } else if (gamepad2.b) {
-        wrist.setPosition(Range.clip(wrist.getPosition() - 0.01, 0, 1));
-    }
-
-    //arm 1-2 i guess
-    if (Math.abs(gamepad2.right_stick_y) > 0) {
-        arm1.setPosition(Range.clip(arm1.getPosition() + ((-gamepad2.right_stick_y) / 100), 0, 1));
-        arm2.setPosition(Range.clip(arm2.getPosition() + ((-gamepad2.right_stick_y) / 100), 0, 1));
-    }*/
-
-   /* //linear slide
-    if (gamepad2.dpad_up) {
-        LinearSlide1.setPower(1);
-        //LinearSlide2.setPower(-1);
-    } else if (gamepad2.dpad_down) {
-        LinearSlide1.setPower(-1);
-        //LinearSlide2.setPower(1);
-    } else {
-        LinearSlide1.setPower(0);
-        //LinearSlide2.setPower(0);
-    }*/
-
-    //helical screw
-   /* if (gamepad2.x == true) {
-        Helix.setDirection(DcMotor.Direction.REVERSE);
-        Helix.setPower(1);
-    } else if (gamepad2.y == true) {
-        Helix.setDirection(DcMotor.Direction.FORWARD);
-        Helix.setPower(1);
-    } else {
-        Helix.setPower(0);
-    }
-
-   */// try {
-        //RUN CODE FOR SERVOS?...
-
-
-  //  } catch (Exception e) {
-
-   // }
-
-    //frontLeft.setPower(0);
-    //frontRight.setPower(0);
-    //armPosition = 0.0;
-    /*
-    float multiplier = 0;
-    if (gamepad2.left_stick_y > 0) {
-        multiplier = gamepad2.left_stick_y;
-
-    } else if (gamepad2.left_stick_y < 0) {
-        multiplier = gamepad2.left_stick_y;
-    } else {
-        multiplier = 0;
-    }
-    if (multiplier > 0) {
-        //stick movement (wheel)
-        backLeft.setPower(-gamepad1.left_stick_y * (1 - multiplier));
-        backRight.setPower(-gamepad1.right_stick_y * (1 - multiplier));
-        frontLeft.setPower(-gamepad1.left_stick_y);
-        frontRight.setPower(-gamepad1.right_stick_y);
-    } else if (multiplier < 0) {
-        backLeft.setPower(-gamepad1.left_stick_y);
-        backRight.setPower(-gamepad1.right_stick_y);
-        frontLeft.setPower(-gamepad1.left_stick_y * (1 + multiplier));
-        frontRight.setPower(-gamepad1.right_stick_y * (1 + multiplier));
-
-    } else {
-        backLeft.setPower(-gamepad1.left_stick_y);
-        backRight.setPower(-gamepad1.right_stick_y);
-        frontLeft.setPower(-gamepad1.left_stick_y);
-        frontRight.setPower(-gamepad1.right_stick_y);
-
-    }*/
-        // MidLeft.setPower(-gamepad1.left_stick_y);
-        //MidRight.setPower(gamepad1.right_stick_y);
-
-    }
+            // E-STOP
+            if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad2.left_bumper && gamepad2.right_bumper) {
+                leftDrive.setPower(0);
+                rightDrive.setPower(0);
+            }
+        }
     }
 
     @Override
