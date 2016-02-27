@@ -46,10 +46,9 @@ public class FTCLionsAutonomousOp extends OpMode {
     //UltrasonicSensor sonar;
     //TouchSensor touch;
 
-
     Servo wing1;
     Servo wing2;
-    Servo flap;
+    Servo climbers;
 
     public FTCLionsAutonomousOp() {
 
@@ -68,33 +67,21 @@ public class FTCLionsAutonomousOp extends OpMode {
         wingMove(1);
 
         wait(1);
-        drivePower(1);
+        drivePower(2);
         driveForward(45);
         wait(1);
         driveForward(45);
 
         wait(1);
-        drivePower(0.5);
+        drivePower(1);
         turnLeft(25);
 
         wait(1);
-        //helical(1);
         climbers(1);
 
         wait(1);
-        drivePower(0.3);
-        driveForward(-20);
-
-        wait(1);
         drivePower(0.6);
-        turnLeft(25);
-
-        wait(1);
-        drivePower(20);
-        wait(2);
-        drivePower(0.9);
-
-        driveForward(50);
+        driveForward(-5);
 
         stopRobot();
     }
@@ -102,8 +89,8 @@ public class FTCLionsAutonomousOp extends OpMode {
     double startPos=0;
     @Override
     public void init() {
-        leftDrive=hardwareMap.dcMotor.get("leftM");
-        rightDrive=hardwareMap.dcMotor.get("rightM");
+        leftDrive=hardwareMap.dcMotor.get("leftDrive");
+        rightDrive=hardwareMap.dcMotor.get("rightDrive");
 
         //sonar = hardwareMap.ultrasonicSensor.get("sonar");
         //touch = hardwareMap.touchSensor.get("touch");
@@ -116,9 +103,8 @@ public class FTCLionsAutonomousOp extends OpMode {
         wing1.scaleRange(0, 1);
         wing2.scaleRange(0, 1);
 
-        flap=hardwareMap.servo.get("flap");
-
-        flap.scaleRange(0, 1);
+        climbers=hardwareMap.servo.get("climbers");
+        climbers.scaleRange(0, 1);
         leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         rightDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
@@ -142,8 +128,8 @@ public class FTCLionsAutonomousOp extends OpMode {
     }
 
     public void drivePower (double power) {
-        leftDrive.setPower(power);
-        rightDrive.setPower(power);
+        leftDrive.setPower(power / 2);
+        rightDrive.setPower(power / 2);
     }
 
     public void wingMove (double position) {
@@ -159,8 +145,7 @@ public class FTCLionsAutonomousOp extends OpMode {
     }
     public void climbers(int flapPos) {
         wait(1);
-        flap.setPosition(flapPos / 2);
-        flap.setPosition(Range.clip(gamepad2.left_trigger, 0, 1));
+        climbers.setPosition(flapPos / 2);
     }
 
     public void wait(int time) {
