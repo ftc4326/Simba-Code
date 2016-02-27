@@ -152,7 +152,7 @@ public class FTCLionsTeleOp extends OpMode {
             }
 
             // CLIMBER MECHANISM
-            if (gamepad2.left_trigger < 1)
+            if (gamepad2.left_trigger < 1) {
                 climbers.setPosition(Range.clip(1 - gamepad2.left_trigger, 0, 1));
             } else {
                 climbers.setPosition(1);
