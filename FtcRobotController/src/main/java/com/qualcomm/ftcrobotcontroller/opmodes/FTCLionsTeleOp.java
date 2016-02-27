@@ -91,7 +91,7 @@ public class FTCLionsTeleOp extends OpMode {
         allClear = hardwareMap.servo.get("allClear");
         allClear.scaleRange(0, 1);
 
-        climbers = hardwareMap.servo.get("climber");
+        climbers = hardwareMap.servo.get("climbers");
         climbers.scaleRange(0, 1);
 
         leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
