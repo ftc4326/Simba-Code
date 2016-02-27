@@ -38,6 +38,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.view.View;
 
 
 public class FTCLionsTeleOp extends OpMode {
@@ -105,6 +116,9 @@ public class FTCLionsTeleOp extends OpMode {
             telemetry.addData("-right gamepad stick y ", -gamepad1.right_stick_y);
             telemetry.addData("-left gamepad stick y ", -gamepad1.left_stick_y);
             telemetry.addData("left gamepad stick y ", gamepad1.left_stick_y);
+
+            //getResources().getConfiguration().orientation;
+
         }
 
         if (started) {
