@@ -57,7 +57,7 @@ public class FTCLionsTeleOp extends OpMode {
     DcMotor leftDrive;
     DcMotor rightDrive;
     DcMotor armX1;
-    DcMotor armX2;
+    //DcMotor armX2;
     DcMotor armTheta;
 
     Servo wing1;
@@ -80,7 +80,7 @@ public class FTCLionsTeleOp extends OpMode {
 
         armTheta = hardwareMap.dcMotor.get("armTheta");
         armX1 = hardwareMap.dcMotor.get("armX1");
-        armX2 = hardwareMap.dcMotor.get("armX2");
+        //armX2 = hardwareMap.dcMotor.get("armX2");
 
         wing1 = hardwareMap.servo.get("wing1");
         wing2 = hardwareMap.servo.get("wing2");
@@ -99,7 +99,7 @@ public class FTCLionsTeleOp extends OpMode {
 
         armTheta.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         armX1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        armX2.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        //armX2.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     @Override
@@ -140,8 +140,8 @@ public class FTCLionsTeleOp extends OpMode {
             ////////////////////////////////
 
             // ARM
-            armX1.setPower(-gamepad2.left_stick_y);
-            armX2.setPower(gamepad2.right_stick_y);
+            armX1.setPower(gamepad2.left_stick_y);
+            //armX2.setPower(gamepad2.right_stick_y);
             armTheta.setPower(gamepad2.right_stick_x);
 
             // ALL CLEAR
