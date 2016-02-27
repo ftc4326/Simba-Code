@@ -62,7 +62,7 @@ public class FTCLionsTeleOp extends OpMode {
 
     Servo wing1;
     Servo wing2;
-    Servo flap;
+    Servo climbers;
     Servo allClear;
 
     boolean started = false;
@@ -75,23 +75,24 @@ public class FTCLionsTeleOp extends OpMode {
     public void start() {
         started = true;
 
-        leftDrive = hardwareMap.dcMotor.get("backLeft");
-        rightDrive = hardwareMap.dcMotor.get("backRight");
+        leftDrive = hardwareMap.dcMotor.get("leftDrive");
+        rightDrive = hardwareMap.dcMotor.get("rightDrive");
 
-        armTheta = hardwareMap.dcMotor.get("armY");
-        armX1 = hardwareMap.dcMotor.get("arm");
-        armX2 = hardwareMap.dcMotor.get("xArm");
+        armTheta = hardwareMap.dcMotor.get("armTheta");
+        armX1 = hardwareMap.dcMotor.get("armX1");
+        armX2 = hardwareMap.dcMotor.get("armX2");
 
         wing1 = hardwareMap.servo.get("wing1");
         wing2 = hardwareMap.servo.get("wing2");
         wing1.scaleRange(0, 1);
         wing2.scaleRange(0, 1);
+        wing2.setDirection(Servo.Direction.REVERSE);
+
         allClear = hardwareMap.servo.get("allClear");
         allClear.scaleRange(0, 1);
 
-        flap = hardwareMap.servo.get("flap");
-
-        flap.scaleRange(0, 1);
+        climbers = hardwareMap.servo.get("climber");
+        climbers.scaleRange(0, 1);
 
         leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         rightDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -113,13 +114,11 @@ public class FTCLionsTeleOp extends OpMode {
             // TELEMETRY FOR JOYSTICK DEBUGGING
             telemetry.addData("Text", "***Robot Movement Data***");
             telemetry.addData("right gamepad stick y ", gamepad1.right_stick_y);
-            telemetry.addData("-right gamepad stick y ", -gamepad1.right_stick_y);
-            telemetry.addData("-left gamepad stick y ", -gamepad1.left_stick_y);
             telemetry.addData("left gamepad stick y ", gamepad1.left_stick_y);
 
             //getResources().getConfiguration().orientation;
-
         }
+
 
         if (started) {
             ////////////////////////////////
@@ -146,10 +145,17 @@ public class FTCLionsTeleOp extends OpMode {
             armTheta.setPower(gamepad2.right_stick_x);
 
             // ALL CLEAR
-            if (gamepad1.right_trigger < 1) {
-                allClear.setPosition(Range.clip(1 - gamepad1.right_trigger, 0, 1));
+            if (gamepad2.right_trigger < 1) {
+                allClear.setPosition(Range.clip(1 - gamepad2.right_trigger, 0, 1));
             } else {
                 allClear.setPosition(1);
+            }
+
+            // CLIMBER MECHANISM
+            if (gamepad2.left_trigger < 1)
+                climbers.setPosition(Range.clip(1 - gamepad2.left_trigger, 0, 1));
+            } else {
+                climbers.setPosition(1);
             }
 
             // E-STOP
