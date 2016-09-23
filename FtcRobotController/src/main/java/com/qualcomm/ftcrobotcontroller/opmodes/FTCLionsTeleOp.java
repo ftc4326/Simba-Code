@@ -58,12 +58,12 @@ public class FTCLionsTeleOp extends OpMode {
     DcMotor rightDrive;
     DcMotor armX1;
     //DcMotor armX2;
-    DcMotor armTheta;
-
-    Servo wing1;
-    Servo wing2;
-    Servo climbers;
-    Servo allClear;
+//    DcMotor armTheta;
+//
+//    Servo wing1;
+//    Servo wing2;
+//    Servo climbers;
+//    Servo allClear;
 
     boolean started = false;
 
@@ -78,27 +78,27 @@ public class FTCLionsTeleOp extends OpMode {
         leftDrive = hardwareMap.dcMotor.get("leftDrive");
         rightDrive = hardwareMap.dcMotor.get("rightDrive");
 
-        armTheta = hardwareMap.dcMotor.get("armTheta");
-        armX1 = hardwareMap.dcMotor.get("armX1");
-        //armX2 = hardwareMap.dcMotor.get("armX2");
-
-        wing1 = hardwareMap.servo.get("wing1");
-        wing2 = hardwareMap.servo.get("wing2");
-        wing1.scaleRange(0, 1);
-        wing2.scaleRange(0, 1);
-        wing2.setDirection(Servo.Direction.REVERSE);
-
-        allClear = hardwareMap.servo.get("allClear");
-        allClear.scaleRange(0, 1);
-
-        climbers = hardwareMap.servo.get("climbers");
-        climbers.scaleRange(0, 1);
+//        armTheta = hardwareMap.dcMotor.get("armTheta");
+//        armX1 = hardwareMap.dcMotor.get("armX1");
+//        //armX2 = hardwareMap.dcMotor.get("armX2");
+//
+//        wing1 = hardwareMap.servo.get("wing1");
+//        wing2 = hardwareMap.servo.get("wing2");
+//        wing1.scaleRange(0, 1);
+//        wing2.scaleRange(0, 1);
+//        wing2.setDirection(Servo.Direction.REVERSE);
+//
+//        allClear = hardwareMap.servo.get("allClear");
+//        allClear.scaleRange(0, 1);
+//
+//        climbers = hardwareMap.servo.get("climbers");
+//        climbers.scaleRange(0, 1);
 
         leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         rightDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
-        armTheta.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        armX1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+//        armTheta.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+//        armX1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         //armX2.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
@@ -131,8 +131,8 @@ public class FTCLionsTeleOp extends OpMode {
 
 
             // WINGS
-            wing1.setPosition(Range.clip(wing1.getPosition() + (gamepad1.right_stick_x), 0, 1));
-            wing2.setPosition(Range.clip(wing2.getPosition() + (gamepad1.left_stick_x), 0, 1));
+//            wing1.setPosition(Range.clip(wing1.getPosition() + (gamepad1.right_stick_x), 0, 1));
+//            wing2.setPosition(Range.clip(wing2.getPosition() + (gamepad1.left_stick_x), 0, 1));
 
 
             ////////////////////////////////
@@ -140,23 +140,23 @@ public class FTCLionsTeleOp extends OpMode {
             ////////////////////////////////
 
             // ARM
-            armX1.setPower(gamepad2.left_stick_y);
-            //armX2.setPower(gamepad2.right_stick_y);
-            armTheta.setPower(gamepad2.right_stick_x);
-
-            // ALL CLEAR
-            if (gamepad2.right_trigger < 1) {
-                allClear.setPosition(Range.clip(1 - gamepad2.right_trigger, 0, 1));
-            } else {
-                allClear.setPosition(1);
-            }
-
-            // CLIMBER MECHANISM
-            if (gamepad2.left_trigger < 1) {
-                climbers.setPosition(Range.clip(1 - gamepad2.left_trigger, 0, 1));
-            } else {
-                climbers.setPosition(1);
-            }
+//            armX1.setPower(gamepad2.left_stick_y);
+//            //armX2.setPower(gamepad2.right_stick_y);
+//            armTheta.setPower(gamepad2.right_stick_x);
+//
+//            // ALL CLEAR
+//            if (gamepad2.right_trigger < 1) {
+//                allClear.setPosition(Range.clip(1 - gamepad2.right_trigger, 0, 1));
+//            } else {
+//                allClear.setPosition(1);
+//            }
+//
+//            // CLIMBER MECHANISM
+//            if (gamepad2.left_trigger < 1) {
+//                climbers.setPosition(Range.clip(1 - gamepad2.left_trigger, 0, 1));
+//            } else {
+//                climbers.setPosition(1);
+//            }
 
             // E-STOP
             if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad2.left_bumper && gamepad2.right_bumper) {
